@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "425430633233",
+    "project_id": "kemenag-89220",
+    "storage_bucket": "kemenag-89220.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425430633233:android:90ea991b34f3894d8b5ab0",
+        "android_client_info": {
+          "package_name": "internal.kemenaggo.kemenag_go_internal_app.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "425430633233-c40oba23c1f3rfpdtvu6eglg5rpq3skl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "internal.kemenaggo.kemenag_go_internal_app.dev",
+            "certificate_hash": "c781d5b725db2fe520aa76bc731a32700cd19369"
+          }
+        },
+        {
+          "client_id": "425430633233-dgejmvk00k3gmhntul2hffjnn8k3g3ij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCubsWEGAQtIrKAoM9OUq6iycWhs_JhRqw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "425430633233-dgejmvk00k3gmhntul2hffjnn8k3g3ij.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

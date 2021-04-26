@@ -1,0 +1,3 @@
+class ResetPasswordRequestDataModel {
+  String email = '';
+}

@@ -1,0 +1,15 @@
+const String splashRoute = '/';
+const String loginRoute = '/login';
+const String berandaRoute = '/beranda';
+const String daftarRoute = '/daftar';
+const String daftarSuksesRoute = '/daftar_sukses';
+const String resetPasswordRoute = '/reset_password';
+const String resetPasswordSuksesRoute = '/reset_password_sukses';
+const String newsRoute = '/news';
+const String detailNewsRoute = '/detail_news';
+const String berandaAsnRoute = '/beranda_asn';
+const String meetingRoute = '/meeting';
+const String createNewMeetingRoute = '/create_new_meeting';
+const String comingSoonRoute = '/coming_soon';
+const String dataKepegawaianRoute = '/data_kepegawaian';
+const String profilRoute = '/profil';
