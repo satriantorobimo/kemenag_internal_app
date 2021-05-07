@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kemenag_go_internal_app/asn/feature/edocument/data/model/data_model.dart';
 import 'package:kemenag_go_internal_app/asn/feature/edocument/data/model/filter_model.dart';
+import 'package:kemenag_go_internal_app/asn/feature/edocument/data/model/get_document_model.dart';
+import 'package:kemenag_go_internal_app/asn/feature/edocument/domain/repo/document_repo.dart';
+import 'package:kemenag_go_internal_app/asn/feature/edocument/presentation/bloc/document/bloc.dart';
+import 'package:kemenag_go_internal_app/core/design_system/colors.dart';
+import 'package:kemenag_go_internal_app/core/resources/routes.dart';
+import 'package:kemenag_go_internal_app/core/util/custom_loader.dart';
+import 'package:kemenag_go_internal_app/core/util/custom_toast.dart';
+import 'package:oktoast/oktoast.dart';
 
 class EdocumentScreen extends StatefulWidget {
   @override
@@ -16,9 +25,13 @@ class _EdocumentScreenState extends State<EdocumentScreen>
   bool viewMode = false;
   AnimationController _animationController;
   Animation<double> _animation;
+  DocumentBloc documentBloc =
+      DocumentBloc(documentRepository: DocumentRepository());
+  final GlobalKey<State> _keyLoader = GlobalKey<State>();
 
   @override
   void initState() {
+    documentBloc.add(GetDocument());
     _animationController = AnimationController(
         duration: const Duration(milliseconds: 500),
         vsync: this,
@@ -45,6 +58,12 @@ class _EdocumentScreenState extends State<EdocumentScreen>
     super.initState();
   }
 
+  @override
+  void dispose() {
+    documentBloc.close();
+    super.dispose();
+  }
+
   List<DropdownMenuItem<FilterModel>> buildDropdownMenuItems(List companies) {
     List<DropdownMenuItem<FilterModel>> items = List();
     for (FilterModel company in companies) {
@@ -67,53 +86,117 @@ class _EdocumentScreenState extends State<EdocumentScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: buildAppBar(context),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  DropdownButton(
-                    underline: Container(),
-                    icon: Icon(Icons.keyboard_arrow_down_rounded),
-                    iconSize: 20.0,
-                    value: _selectedCompany,
-                    items: _dropdownMenuItems,
-                    onChanged: onChangeDropdownItem,
+        backgroundColor: Colors.white,
+        appBar: buildAppBar(context),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(
+            Icons.add,
+            size: 32,
+          ),
+          backgroundColor: DSColor.primaryGreen,
+          onPressed: () async {
+            final Object _args = await Navigator.pushNamed(
+              context,
+              uploadDocumentRoute,
+            );
+
+            if (_args) {
+              showToastWidget(
+                  const CustomToast(
+                    message: 'Document berhasil ditambahkan.',
+                    backgroundColor: DSColor.primaryGreen,
+                    isSuccess: true,
                   ),
-                  !viewMode
-                      ? InkWell(
-                          onTap: () {
-                            setState(() {
-                              viewMode = true;
-                            });
-                          },
-                          child: Icon(Icons.grid_view))
-                      : InkWell(
-                          onTap: () {
-                            setState(() {
-                              viewMode = false;
-                            });
-                          },
-                          child: Icon(Icons.list))
-                ],
-              ),
-            ),
-            SizedBox(height: 16),
-            AnimatedSwitcher(
-                duration: Duration(milliseconds: 200),
-                child: !viewMode ? _listView() : _gridView())
-          ],
+                  position: ToastPosition.top,
+                  duration: const Duration(seconds: 5));
+              documentBloc.add(GetDocument());
+            }
+          },
         ),
+        body: BlocListener<DocumentBloc, DocumentState>(
+            cubit: documentBloc,
+            listener: (_, DocumentState state) {
+              if (state is DocumentLoading) {
+                LoaderDialogs.showLoadingDialog(context, _keyLoader);
+              }
+              if (state is DocumentGetLoaded) {
+                Navigator.of(_keyLoader.currentContext, rootNavigator: true)
+                    .pop();
+              }
+              if (state is DocumentError) {
+                Navigator.of(_keyLoader.currentContext, rootNavigator: true)
+                    .pop();
+                if (state.error == 'expired') {
+                  Navigator.pushNamed(context, loginRoute);
+                }
+              }
+            },
+            child: BlocBuilder<DocumentBloc, DocumentState>(
+                cubit: documentBloc,
+                builder: (_, DocumentState state) {
+                  if (state is DocumentInitial) {
+                    return Container();
+                  }
+                  if (state is DocumentLoading) {
+                    return Container();
+                  }
+                  if (state is DocumentGetLoaded) {
+                    return _mainContent(state.getDocumentModel);
+                  }
+                  if (state is DocumentError) {
+                    return Container();
+                  }
+                  return Container();
+                })));
+  }
+
+  Widget _mainContent(GetDocumentModel getDocumentModel) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                DropdownButton(
+                  underline: Container(),
+                  icon: Icon(Icons.keyboard_arrow_down_rounded),
+                  iconSize: 20.0,
+                  value: _selectedCompany,
+                  items: _dropdownMenuItems,
+                  onChanged: onChangeDropdownItem,
+                ),
+                !viewMode
+                    ? InkWell(
+                        onTap: () {
+                          setState(() {
+                            viewMode = true;
+                          });
+                        },
+                        child: Icon(Icons.grid_view))
+                    : InkWell(
+                        onTap: () {
+                          setState(() {
+                            viewMode = false;
+                          });
+                        },
+                        child: Icon(Icons.list))
+              ],
+            ),
+          ),
+          SizedBox(height: 16),
+          AnimatedSwitcher(
+              duration: Duration(milliseconds: 200),
+              child: !viewMode
+                  ? _listView(getDocumentModel)
+                  : _gridView(getDocumentModel))
+        ],
       ),
     );
   }
 
-  Widget _gridView() {
+  Widget _gridView(GetDocumentModel getDocumentModel) {
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0),
       child: GridView.count(
@@ -122,7 +205,7 @@ class _EdocumentScreenState extends State<EdocumentScreen>
         crossAxisSpacing: 16.0,
         mainAxisSpacing: 16.0,
         shrinkWrap: true,
-        children: _dataModel
+        children: getDocumentModel.data
             .map((data) => Card(
                   color: Color(0xFFF5F5F5),
                   shape: RoundedRectangleBorder(
@@ -135,24 +218,24 @@ class _EdocumentScreenState extends State<EdocumentScreen>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          data.type == 'folder'
+                          data.group != ''
                               ? Image.asset('assets/images/folder_icon.png',
                                   height: 40)
                               : Image.asset('assets/images/file_icon.png',
                                   height: 40),
                           SizedBox(height: 8),
-                          Text(data.title,
+                          Text(data.fileName,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 16.0, fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
-                          data.type == 'folder'
-                              ? Text('${data.items} items',
+                          data.group != ''
+                              ? Text('0 items',
                                   style: TextStyle(
                                     fontSize: 14.0,
                                     color: Colors.grey,
                                   ))
-                              : Text('${data.items}',
+                              : Text('-',
                                   style: TextStyle(
                                     fontSize: 14.0,
                                     color: Colors.grey,
@@ -167,29 +250,29 @@ class _EdocumentScreenState extends State<EdocumentScreen>
     );
   }
 
-  Widget _listView() {
+  Widget _listView(GetDocumentModel getDocumentModel) {
     return ListView.separated(
         separatorBuilder: (BuildContext context, int index) {
           return SizedBox(height: 16);
         },
-        itemCount: _dataModel.length,
+        itemCount: getDocumentModel.data.length,
         scrollDirection: Axis.vertical,
         physics: ScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (context, index) {
           return ListTile(
-            leading: _dataModel[index].type == 'folder'
+            leading: getDocumentModel.data[index].group != ''
                 ? Image.asset('assets/images/folder_icon.png', height: 63)
                 : Image.asset('assets/images/file_icon.png', height: 63),
-            title: Text(_dataModel[index].title,
+            title: Text(getDocumentModel.data[index].fileName,
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
-            subtitle: _dataModel[index].type == 'folder'
-                ? Text('${_dataModel[index].items} items',
+            subtitle: getDocumentModel.data[index].group != ''
+                ? Text('0 items',
                     style: TextStyle(
                       fontSize: 14.0,
                       color: Colors.grey,
                     ))
-                : Text('${_dataModel[index].items}',
+                : Text('-',
                     style: TextStyle(
                       fontSize: 14.0,
                       color: Colors.grey,
