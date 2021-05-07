@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kemenag_go_internal_app/core/design_system/colors.dart';
+import 'package:kemenag_go_internal_app/core/function/push_notification_service.dart';
 import 'package:kemenag_go_internal_app/core/function/shared_preff.dart';
 import 'package:kemenag_go_internal_app/core/resources/routes.dart';
 import 'package:kemenag_go_internal_app/core/util/custom_loader.dart';
@@ -50,6 +51,14 @@ class _FormWidgetState extends State<FormWidget> {
                     .pop();
                 SharedPreff()
                     .savedSharedString('token', state.loginModel.access_token);
+                SharedPreff().savedSharedString(
+                    'username', state.loginModel.user.username);
+                SharedPreff().savedSharedString('user_type', 'asn');
+                SharedPreff().savedSharedInt('id', state.loginModel.user.id);
+                PushNotificationService().fcmSubscribe('asn');
+                PushNotificationService()
+                    .fcmSubscribe(state.loginModel.user.username);
+                PushNotificationService().fcmUnSubscribe('guest');
                 Navigator.pushNamedAndRemoveUntil(
                     context, berandaAsnRoute, (route) => false);
               }
@@ -109,7 +118,7 @@ class _FormWidgetState extends State<FormWidget> {
           decoration: InputDecoration(
             alignLabelWithHint: true,
             isDense: true,
-            hintText: 'Email',
+            hintText: 'Username',
             hintStyle: TextStyle(
                 color: _validate ? DSColor.thirdDanger : Colors.black26),
             contentPadding: EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 12.0),
@@ -135,7 +144,7 @@ class _FormWidgetState extends State<FormWidget> {
                 borderRadius: BorderRadius.circular(24.0),
                 borderSide: BorderSide(color: Colors.white)),
           ),
-          validator: FormValidator().validateEmail,
+          validator: FormValidator().validateEmpty,
           onSaved: (String value) {
             _loginData.email = value;
           },

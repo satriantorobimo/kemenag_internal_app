@@ -15,8 +15,6 @@ class NewsApiClient {
       print(res);
       newsModel = NewsModel.fromJson(res);
       return newsModel;
-    }).catchError((dynamic onError) {
-      return onError;
     });
   }
 }

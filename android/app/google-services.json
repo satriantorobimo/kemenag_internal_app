@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "425430633233",
+    "firebase_url": "https://kemenag-89220-default-rtdb.firebaseio.com",
     "project_id": "kemenag-89220",
     "storage_bucket": "kemenag-89220.appspot.com"
   },
@@ -37,6 +38,57 @@
             {
               "client_id": "425430633233-dgejmvk00k3gmhntul2hffjnn8k3g3ij.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "425430633233-vtohpermbo3l5v2ea4ihbiltlk86gd7v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "superapp.kemenag.go.id"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425430633233:android:bb938479fa8afd8a8b5ab0",
+        "android_client_info": {
+          "package_name": "superapp.kemenag.go.id"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "425430633233-ldp6j03batmdj77r0lptg8k30v1rkj0m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "superapp.kemenag.go.id",
+            "certificate_hash": "ee3274f4b712955f6c80707d1e6544ffed82353b"
+          }
+        },
+        {
+          "client_id": "425430633233-dgejmvk00k3gmhntul2hffjnn8k3g3ij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCubsWEGAQtIrKAoM9OUq6iycWhs_JhRqw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "425430633233-dgejmvk00k3gmhntul2hffjnn8k3g3ij.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "425430633233-vtohpermbo3l5v2ea4ihbiltlk86gd7v.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "superapp.kemenag.go.id"
+              }
             }
           ]
         }

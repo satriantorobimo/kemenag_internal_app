@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kemenag_go_internal_app/core/design_system/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:date_format/date_format.dart';
-import 'package:flutter/services.dart';
 import 'package:documents_picker/documents_picker.dart';
 
 class CreateNewMeetingScreen extends StatefulWidget {

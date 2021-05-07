@@ -1,0 +1,1 @@
+bundle exec fastlane android_kemenag_app_dev

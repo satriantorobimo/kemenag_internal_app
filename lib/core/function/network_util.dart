@@ -94,20 +94,19 @@ class NetworkUtil {
             (dynamic err) => throw Exception('Error while fetching data'));
   }
 
-  Future<dynamic> postMultiPart(String url, String fileName, String token,
-      String _phoneNumber, String _tokenJwt) async {
+  Future<dynamic> postMultiPart(
+      String url, String fileName, String token) async {
     final http.MultipartRequest request =
         http.MultipartRequest('POST', Uri.parse(url));
-    request.files.add(await http.MultipartFile.fromPath('file', fileName));
+    request.files.add(await http.MultipartFile.fromPath('files', fileName));
     request.headers.addAll({
       'Content-Type': 'multipart/form-data',
-      'Authorization': 'Bearer $token',
-      'BFI-App-Code': 'bfi-mobile-customer',
-      'BFI-Phone-Number': _phoneNumber,
-      'BFI-App-Token': _tokenJwt
+      'Authorization': 'Bearer $token'
     });
-    final http.StreamedResponse res = await request.send();
-    print(res);
+    final http.Response res =
+        await http.Response.fromStream(await request.send());
+
+    print("Result: ${res.statusCode}");
 
     if (res.statusCode == 200 ||
         res.statusCode == 201 ||
@@ -116,9 +115,7 @@ class NetworkUtil {
         res.statusCode == 401 ||
         res.statusCode == 403 ||
         res.statusCode == 400) {
-      final String respStr = await res.stream.bytesToString();
-      print(respStr);
-      return _decoder.convert(respStr);
+      return _decoder.convert(res.body);
     } else {
       return throw Exception('Error while fetching data');
     }
