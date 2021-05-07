@@ -12,6 +12,7 @@ import 'package:kemenag_go_internal_app/asn/feature/data_kepagawaian/presentatio
 import 'package:kemenag_go_internal_app/asn/feature/edit_password/presentation/screen/edit_password_screen.dart';
 import 'package:kemenag_go_internal_app/asn/feature/edit_profile/presentation/screen/edit_profile_screen.dart';
 import 'package:kemenag_go_internal_app/asn/feature/edocument/presentation/screen/edocument_screen.dart';
+import 'package:kemenag_go_internal_app/asn/feature/edocument/presentation/screen/upload_document_screen.dart';
 import 'package:kemenag_go_internal_app/asn/feature/forum/presentation/screen/forum_comment.dart';
 import 'package:kemenag_go_internal_app/asn/feature/forum/presentation/screen/forum_detail.dart';
 import 'package:kemenag_go_internal_app/asn/feature/forum/presentation/screen/forum_screen.dart';
@@ -275,6 +276,12 @@ class Routers {
       case logAbsenRoute:
         return PageRouteBuilder(
             pageBuilder: (_, __, ___) => LogAbsenScreen(),
+            transitionsBuilder: (_, a, __, c) =>
+                FadeTransition(opacity: a, child: c));
+
+       case uploadDocumentRoute:
+        return PageRouteBuilder(
+            pageBuilder: (_, __, ___) => UploadDocumentScreen(),
             transitionsBuilder: (_, a, __, c) =>
                 FadeTransition(opacity: a, child: c));
 
