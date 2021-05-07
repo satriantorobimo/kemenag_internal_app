@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kemenag_go_internal_app/asn/feature/profile/data/profile_model.dart';
+import 'package:kemenag_go_internal_app/asn/feature/profile/domain/repo/profile_repo.dart';
+import 'package:kemenag_go_internal_app/asn/feature/profile/presentation/bloc/profile/bloc.dart';
 import 'package:kemenag_go_internal_app/asn/feature/profile/presentation/widget/avatar_widget.dart';
 import 'package:kemenag_go_internal_app/asn/feature/profile/presentation/widget/menu_widget.dart';
 import 'package:kemenag_go_internal_app/asn/feature/profile/presentation/widget/profile_detail_widget.dart';
 import 'package:kemenag_go_internal_app/core/design_system/colors.dart';
+import 'package:kemenag_go_internal_app/core/resources/routes.dart';
+import 'package:kemenag_go_internal_app/core/util/custom_loader.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key key}) : super(key: key);
@@ -12,6 +18,9 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  ProfileBloc profileBloc = ProfileBloc(profileRepository: ProfileRepository());
+  final GlobalKey<State> _keyLoader = GlobalKey<State>();
+
   Widget appBarTitle = Text(
     'Profil',
     style: TextStyle(color: Colors.black, fontSize: 16),
@@ -25,27 +34,72 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
+    profileBloc.add(GetProfile());
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    profileBloc.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      key: globalKey,
-      appBar: buildAppBar(context),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AvatarWidget(),
-              SizedBox(height: 16),
-              ProfileDetailWidget(),
-              MenuWidget()
-            ],
-          ),
+        backgroundColor: Colors.white,
+        key: globalKey,
+        appBar: buildAppBar(context),
+        body: BlocListener<ProfileBloc, ProfileState>(
+            cubit: profileBloc,
+            listener: (_, ProfileState state) {
+              if (state is ProfileLoading) {
+                LoaderDialogs.showLoadingDialog(context, _keyLoader);
+              }
+              if (state is ProfileLoaded) {
+                Navigator.of(_keyLoader.currentContext, rootNavigator: true)
+                    .pop();
+              }
+              if (state is ProfileError) {
+                Navigator.of(_keyLoader.currentContext, rootNavigator: true)
+                    .pop();
+                if (state.error == 'expired') {
+                  print('expired');
+                  Navigator.pushNamed(context, loginRoute);
+                }
+              }
+            },
+            child: BlocBuilder<ProfileBloc, ProfileState>(
+                cubit: profileBloc,
+                builder: (_, ProfileState state) {
+                  if (state is ProfileInitial) {
+                    return Container();
+                  }
+                  if (state is ProfileLoading) {
+                    return Container();
+                  }
+                  if (state is ProfileLoaded) {
+                    return _mainContent(state.profileModel);
+                  }
+                  if (state is ProfileError) {
+                    return Container();
+                  }
+                  return Container();
+                })));
+  }
+
+  Widget _mainContent(ProfileModel profileModel) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AvatarWidget(profileModel.data.user_detail.url_photo),
+            SizedBox(height: 16),
+            ProfileDetailWidget(profileModel.data),
+            MenuWidget()
+          ],
         ),
       ),
     );
@@ -62,15 +116,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         color: Colors.black,
       ),
       actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 16.0),
-          child: Row(
-            children: [
-              Icon(Icons.edit_rounded, size: 14, color: DSColor.primaryGreen),
-              SizedBox(width: 8),
-              Text('Edit Profil',
-                  style: TextStyle(fontSize: 11, color: DSColor.primaryGreen))
-            ],
+        InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, editProfileRoute);
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Row(
+              children: [
+                Icon(Icons.edit_rounded, size: 14, color: DSColor.primaryGreen),
+                SizedBox(width: 8),
+                Text('Edit Profil',
+                    style: TextStyle(fontSize: 11, color: DSColor.primaryGreen))
+              ],
+            ),
           ),
         )
       ],

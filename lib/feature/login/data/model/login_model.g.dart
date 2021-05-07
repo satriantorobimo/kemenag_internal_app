@@ -28,31 +28,13 @@ Map<String, dynamic> _$LoginModelToJson(LoginModel instance) =>
 User _$UserFromJson(Map<String, dynamic> json) {
   return User(
     id: json['id'] as int,
-    name: json['name'] as String,
     username: json['username'] as String,
     email: json['email'] as String,
-    email_verified_at: json['email_verified_at'] as String,
-    is_admin: json['is_admin'] as int,
-    fcm_id: json['fcm_id'] as String,
-    last_login: json['last_login'] as String,
-    is_active: json['is_active'] as int,
-    remember_token: json['remember_token'] as String,
-    created_at: json['created_at'] as String,
-    updated_at: json['updated_at'] as String,
   );
 }
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'id': instance.id,
-      'name': instance.name,
       'username': instance.username,
       'email': instance.email,
-      'email_verified_at': instance.email_verified_at,
-      'is_admin': instance.is_admin,
-      'fcm_id': instance.fcm_id,
-      'last_login': instance.last_login,
-      'is_active': instance.is_active,
-      'remember_token': instance.remember_token,
-      'created_at': instance.created_at,
-      'updated_at': instance.updated_at,
     };

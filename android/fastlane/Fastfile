@@ -1,0 +1,30 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Upload BFI Apps Android"
+  gradle( flavor: "dev", task: "bundle", build_type: "Release", flags: "-Ptarget=lib/main_dev.dart")
+  lane :android_kemenag_app_dev do
+      firebase_app_distribution(
+          app: "1:425430633233:android:90ea991b34f3894d8b5ab0",
+          groups: "internal-app",
+          release_notes: "Change Log : - Test FastLane",
+          firebase_cli_path: "/usr/local/bin/firebase",
+          apk_path: "../build/app/outputs/apk/dev/release/app-dev-release.apk"
+      )
+  end
+end

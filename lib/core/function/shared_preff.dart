@@ -6,6 +6,11 @@ class SharedPreff {
     await prefs.setString(key, value);
   }
 
+  Future<void> savedSharedInt(String key, int value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(key, value);
+  }
+
   Future<void> savedSharedBool(String key, bool value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(key, value);
@@ -16,6 +21,11 @@ class SharedPreff {
     return prefs.getString(key);
   }
 
+  Future<int> getSharedInt(String key) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(key);
+  }
+
   Future<bool> getSharedBool(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool(key);
@@ -24,5 +34,10 @@ class SharedPreff {
   Future<void> deleteSharedPref(String key) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(key);
+  }
+
+  Future<void> clearSharedPref() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
   }
 }

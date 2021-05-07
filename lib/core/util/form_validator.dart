@@ -47,4 +47,12 @@ class FormValidator {
       return null;
     }
   }
+
+  String validateEmpty(String value) {
+    if (value.isEmpty) {
+      return "Username is Required";
+    } else {
+      return null;
+    }
+  }
 }

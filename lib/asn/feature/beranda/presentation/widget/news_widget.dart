@@ -218,7 +218,8 @@ class _NewsAsnWidgetState extends State<NewsAsnWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CachedNetworkImage(
-                        imageUrl: newsModel.data.data[index].url_photo,
+                        imageUrl: newsModel.data.data[index].url_photo ??
+                            'https://kubalubra.is/wp-content/uploads/2017/11/default-thumbnail.jpg',
                         progressIndicatorBuilder:
                             (context, url, downloadProgress) => Center(
                           child: CircularProgressIndicator(
@@ -295,7 +296,8 @@ class _NewsAsnWidgetState extends State<NewsAsnWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CachedNetworkImage(
-                        imageUrl: datas[index].url_photo,
+                        imageUrl: datas[index].url_photo ??
+                            'https://kubalubra.is/wp-content/uploads/2017/11/default-thumbnail.jpg',
                         progressIndicatorBuilder:
                             (context, url, downloadProgress) => Center(
                           child: CircularProgressIndicator(

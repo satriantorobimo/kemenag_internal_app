@@ -24,7 +24,7 @@ class NewsCategoryBloc extends Bloc<NewsCategoryEvent, NewsCategoryState> {
         newsCategoryModel = await newsCategoryRepository.getNewsCategory();
         yield NewsCategoryLoaded(newsCategoryModel: newsCategoryModel);
       } catch (e) {
-        yield NewsCategoryError(error: e);
+        yield NewsCategoryError(error: e.toString());
       }
     }
   }
