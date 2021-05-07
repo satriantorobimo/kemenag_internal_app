@@ -32,3 +32,4 @@ const String riwayatJabatanRoute = '/riwayat_jabatan';
 const String riwayatGolonganRoute = '/riwayat_golongan';
 const String edocumentRoute = '/edocument';
 const String logAbsenRoute = '/log_absen';
+const String uploadDocumentRoute = '/upload_document';

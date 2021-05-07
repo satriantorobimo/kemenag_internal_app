@@ -115,4 +115,11 @@ class UrlString {
     final String urlDataKepegawaian2 = urlDataKepegawaian();
     return _baseUrl + urlDataKepegawaian2;
   }
+
+  static String urlAddDoc() => 'api/document';
+
+  String getUrlAddDoc() {
+    final String urlAddDoc2 = urlAddDoc();
+    return _baseUrl + urlAddDoc2;
+  }
 }
