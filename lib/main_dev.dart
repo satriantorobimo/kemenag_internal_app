@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
+import 'core/function/setup_locator.dart';
 import 'flavor_config.dart';
 import 'main.dart';
 
@@ -16,8 +19,10 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 Future main() async {
+  setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
-
+  await FlutterDownloader.initialize(debug: true);
+  await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

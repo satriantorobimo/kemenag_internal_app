@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:kemenag_go_internal_app/core/design_system/colors.dart';
+import 'package:kemenag_go_internal_app/core/function/push_notification_service.dart';
 import 'package:kemenag_go_internal_app/core/function/shared_preff.dart';
 import 'package:kemenag_go_internal_app/core/resources/routes.dart';
 
@@ -21,9 +22,16 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(Duration(seconds: 2), () {
       SharedPreff().getSharedString('token').then((value) {
         if (value == null) {
+          PushNotificationService().fcmSubscribe('guest');
           Navigator.pushNamed(context, berandaRoute);
         } else {
-          Navigator.pushNamed(context, berandaAsnRoute);
+          SharedPreff().getSharedString('user_type').then((value) {
+            if (value == 'asn') {
+              Navigator.pushNamed(context, berandaAsnRoute);
+            } else {
+              Navigator.pushNamed(context, berandaNonAsnRoute);
+            }
+          });
         }
       });
     });

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kemenag_go_internal_app/core/design_system/colors.dart';
+import 'package:kemenag_go_internal_app/core/resources/routes.dart';
 
 class ContentWidget extends StatelessWidget {
   @override
@@ -28,7 +29,9 @@ class ContentWidget extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, berandaRoute);
+              },
               padding: EdgeInsets.all(12),
               color: DSColor.secondaryOrange,
               child: Text('Masuk', style: TextStyle(color: Colors.white)),

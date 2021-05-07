@@ -73,7 +73,7 @@ class FloatingButtonWidget extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pushNamed(context, comingSoonRoute);
+                        Navigator.pushNamed(context, loginNonAsnRoute);
                       },
                     ),
                     SizedBox(height: 8),

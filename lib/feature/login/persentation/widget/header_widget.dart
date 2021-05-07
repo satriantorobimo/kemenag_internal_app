@@ -21,7 +21,7 @@ class HeaderWidget extends StatelessWidget {
         SizedBox(height: 16),
         Center(
             child: Text(
-          'Gunakan Email & Password',
+          'Gunakan Username & Password',
           style: TextStyle(color: Colors.white, fontSize: 12),
         )),
       ],

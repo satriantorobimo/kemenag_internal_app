@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kemenag_go_internal_app/core/design_system/colors.dart';
+import 'package:kemenag_go_internal_app/core/function/push_notification_service.dart';
 import 'package:kemenag_go_internal_app/core/function/shared_preff.dart';
 import 'package:kemenag_go_internal_app/core/resources/routes.dart';
 
@@ -21,8 +22,14 @@ class MenuWidget extends StatelessWidget {
             children: [
               Text('Password',
                   style: TextStyle(fontSize: 14, color: Colors.black)),
-              Text('Ganti Password',
-                  style: TextStyle(fontSize: 14, color: DSColor.primaryGreen)),
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, editPasswordRoute);
+                },
+                child: Text('Ganti Password',
+                    style:
+                        TextStyle(fontSize: 14, color: DSColor.primaryGreen)),
+              ),
             ],
           ),
           SizedBox(height: 24),
@@ -36,7 +43,12 @@ class MenuWidget extends StatelessWidget {
           SizedBox(height: 16),
           InkWell(
               onTap: () {
-                SharedPreff().deleteSharedPref('token');
+                SharedPreff().getSharedString('username').then((value) {
+                  PushNotificationService().fcmUnSubscribe('asn');
+                  PushNotificationService().fcmUnSubscribe(value);
+                  PushNotificationService().fcmUnSubscribe('guest');
+                });
+                SharedPreff().clearSharedPref();
                 Navigator.pushNamedAndRemoveUntil(
                     context, berandaRoute, (route) => false);
               },

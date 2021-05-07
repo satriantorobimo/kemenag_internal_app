@@ -38,7 +38,7 @@ class _BerandaAsnScreenState extends State<BerandaAsnScreen> {
         ),
         title: 'Meeting'));
     _asnService.add(AsnService(
-        tags: 'absesnsi',
+        tags: 'absensi',
         image: Image.asset(
           'assets/images/absensi.png',
           width: 22,
@@ -191,6 +191,14 @@ class _BerandaAsnScreenState extends State<BerandaAsnScreen> {
             Navigator.pushNamed(context, meetingRoute);
           } else if (asnService.tags == 'data-kepegawaian') {
             Navigator.pushNamed(context, dataKepegawaianRoute);
+          } else if (asnService.tags == 'forum') {
+            Navigator.pushNamed(context, forumRoute);
+          } else if (asnService.tags == 'info-staker') {
+            Navigator.pushNamed(context, infoStatkerRoute);
+          } else if (asnService.tags == 'absensi') {
+            Navigator.pushNamed(context, absensiRoute);
+          } else if (asnService.tags == 'edocument') {
+            Navigator.pushNamed(context, edocumentRoute);
           }
         },
         child: Column(

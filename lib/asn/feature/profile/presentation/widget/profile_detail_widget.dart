@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:kemenag_go_internal_app/asn/feature/profile/data/profile_model.dart';
 
 class ProfileDetailWidget extends StatelessWidget {
+  final Data data;
+
+  const ProfileDetailWidget(this.data);
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('Julianti Susiani Sulistiya',
+        Text(data.name,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         SizedBox(height: 16),
         Container(
@@ -24,31 +28,31 @@ class ProfileDetailWidget extends StatelessWidget {
                   Text('NIP',
                       style: TextStyle(fontSize: 13, color: Colors.grey)),
                   SizedBox(height: 4),
-                  Text('1234567890',
+                  Text(data.username ?? '-',
                       style: TextStyle(fontSize: 16, color: Colors.black)),
                   SizedBox(height: 16),
                   Text('Email',
                       style: TextStyle(fontSize: 13, color: Colors.grey)),
                   SizedBox(height: 4),
-                  Text('email@email.com',
+                  Text(data.email ?? '-',
                       style: TextStyle(fontSize: 16, color: Colors.black)),
                   SizedBox(height: 16),
                   Text('No Handphone',
                       style: TextStyle(fontSize: 13, color: Colors.grey)),
                   SizedBox(height: 4),
-                  Text('081234567890',
+                  Text(data.user_detail.nomor_hp ?? '-',
                       style: TextStyle(fontSize: 16, color: Colors.black)),
                   SizedBox(height: 16),
                   Text('Tempat Lahir',
                       style: TextStyle(fontSize: 13, color: Colors.grey)),
                   SizedBox(height: 4),
-                  Text('Jakarta',
+                  Text(data.user_detail.tempat_lahir ?? '-',
                       style: TextStyle(fontSize: 16, color: Colors.black)),
                   SizedBox(height: 16),
                   Text('Tanggal Lahir',
                       style: TextStyle(fontSize: 13, color: Colors.grey)),
                   SizedBox(height: 4),
-                  Text('10 Januari 1970',
+                  Text(data.user_detail.tanggal_lahir ?? '-',
                       style: TextStyle(fontSize: 16, color: Colors.black)),
                   SizedBox(height: 16),
                   Text('Alamat',
